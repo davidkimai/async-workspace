@@ -1,0 +1,9 @@
+{
+  "editor.wordWrap": "on",
+  "files.eol": "\n",
+  "files.autoSave": "onFocusChange",
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  }
+}

@@ -1,62 +1,148 @@
-# Async Collaboration Workspace (PDF-defined)
+# Async Collaboration Workspace
 
-This folder follows the structure and process from `async_workflow.pdf`:
+A lightweight, timezone-agnostic, color-attributed collaboration workspace template based on **Async Collaboration Workflow**.
 
-## Layout
+This repo is designed so multiple people can add their notes/transcripts, then merge into one traceable living status document:
+- `status.tex` (source of truth)
+- `status.pdf` (readable output)
 
-- `status.tex` — canonical living document
-- `status.pdf` — rendered PDF output (generated after compile)
-- `CLAUDE.md` — orchestration rules for collaborators
-- `merge-resolve.py` — helper for conflict-heavy sections
-- `elizabeth/transcripts & notes/` — Elizabeth’s raw inputs
-- `jason/transcripts & notes/`   — Jason’s raw inputs
-- `amy/transcripts & notes/`     — Amy’s raw inputs
-- `hayley/transcripts & notes/`  — Hayley’s raw inputs
+---
 
-## Quick setup
+## Strategic setup (quick, non-technical friendly)
 
-1. Clone and update from shared repository:
-   ```bash
-   git pull origin main
-   ```
-2. Start your work on your own branch:
-   ```bash
-   git checkout -b <your-name>-workspace
-   ```
-3. Add transcripts/notes in your folder as files or markdown notes.
-4. Edit `status.tex` with color-coded contributions where you add updates:
-   - `\textcolor{elizC}{...}`
-   - `\textcolor{amyC}{...}`
-   - `\textcolor{jasonC}{...}`
-   - `\textcolor{hayleyC}{...}`
+### 1) Open the workspace
 
-## Contribution flow
+1. Open this folder in **VS Code**
+   - `File ▸ Open Folder…` → choose `async-workspace`
+2. Open the Explorer and confirm you see:
+   - `status.tex`
+   - `CLAUDE.md`
+   - folders: `amy`, `jason`, `elizabeth`, `hayley` (each with `transcripts & notes`)
+3. Install recommended VS Code extensions when prompted (LaTeX + Git tools).
 
-1. Pull latest `status.tex` and add your updates in your folder.
-2. Run Claude Code synthesis to propose `[DRAFT]` updates with source attribution.
-3. If there is a same-line conflict, keep both options in color and tag for meeting.
-4. Commit and push your branch:
-   ```bash
-   git add .
-   git commit -m "Async workspace: add updates"
-   git push
-   ```
-
-## Merge conflict helper
-
-If `status.tex` has conflict blocks, convert them with:
+### 2) Get the latest version
 
 ```bash
-python workspace/merge-resolve.py workspace/status.tex -o workspace/status.draft.tex
+# from the repo folder
+
+git pull origin main
 ```
 
-Then review and manually resolve to a single `status.tex` in a follow-up commit.
-
-## Compile PDF
+### 3) Start your own branch
 
 ```bash
-cd workspace
+git checkout -b <your-name>-workspace
+```
+
+Examples:
+- `git checkout -b jason-iteration-1`
+- `git checkout -b amy-meeting-notes`
+
+### 4) Add your notes
+
+Save raw notes/transcripts in your own folder:
+- `amy/transcripts & notes/`
+- `jason/transcripts & notes/`
+- `elizabeth/transcripts & notes/`
+- `hayley/transcripts & notes/`
+
+### 5) Update status
+
+Edit `status.tex` and add your contribution in your color:
+- `\textcolor{elizC}{...}` for Elizabeth
+- `\textcolor{amyC}{...}` for Amy
+- `\textcolor{jasonC}{...}` for Jason
+- `\textcolor{hayleyC}{...}` for Hayley
+
+### 6) Save, compile, and commit
+
+```bash
+# (optional but recommended before commit)
 ./render-status.sh
+
+# review output + commit
+
+git status
+# add files
+git add .
+git commit -m "Async workspace: add updates"
+git push -u origin HEAD
 ```
 
-If you do not have LaTeX locally, open the shared Overleaf document and paste the LaTeX after each merge.
+> If you only changed LaTeX and want a quick check, compile command will create a PDF so humans can review easily.
+
+---
+
+## Conflict handling (when two people edit same line)
+
+When there is conflicting text in `status.tex`, use the helper script:
+
+```bash
+python merge-resolve.py status.tex -o status.draft.tex
+```
+
+This keeps both versions in contributor colors so a human can make the final choice.
+
+---
+
+## Integrate with **Claude Code** (non-technical setup)
+
+1. Install Claude Code CLI (if not already):
+   - Follow your organization’s normal Claude installation.
+2. Open terminal in this repo.
+3. Run:
+
+```bash
+claude -p "Read CLAUDE.md and status.tex, then draft the next safe [DRAFT] update with source attribution and color-coded text where applicable."
+```
+
+4. Ask for an explicit task, e.g.:
+> "Summarize today’s inputs from ./jason/transcripts & notes into status.tex as a [DRAFT] for the Decisions section."
+
+Quick one-liner helper (if you prefer):
+
+```bash
+./start-claude.sh "Draft a [DRAFT] update for Open Questions from notes in ./amy/transcripts\ \&\ notes"
+```
+
+---
+
+## Integrate with **Codex** (non-technical setup)
+
+1. Install Codex CLI and authenticate.
+2. Open terminal in this repo.
+3. Run:
+
+```bash
+codex --dangerously-skip-permissions -p "Read CLAUDE.md and status.tex, then produce a color-coded [DRAFT] proposal from the latest transcripts."
+```
+
+4. Keep prompts constrained to this workspace:
+- "only touch files under this repo"
+- "preserve color attribution"
+
+Quick one-liner helper:
+
+```bash
+./start-codex.sh "Propose a [DRAFT] update for Conflicts section from ./hayley/transcripts & notes"
+```
+
+---
+
+## VS Code + AI workflow (simple, repeatable)
+
+**Recommended sequence every time:**
+1. Pull latest → 2) switch branch → 3) add notes in your folder → 4) update `status.tex` → 5) compile PDF → 6) commit/push.
+
+If your team is non-technical:
+- You only need to copy and paste the commands above.
+- Use your preferred AI tool (Claude Code or Codex) to draft text.
+- Keep edits in your own folder + only patch `status.tex` for proposals.
+
+---
+
+## Notes
+
+- `status.tex` is the canonical source for decisions and references.
+- `status.pdf` is the human-friendly output for sharing.
+
