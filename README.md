@@ -38,7 +38,8 @@ Run only these steps:
 
 If the folder already exists, skip cloning and start at step 2.
 Do not modify any repo files.
-Reply with: READY + git remote + current branch + next step for user.
+Reply with: READY + git remote + current branch + a short plain-English explanation of how this workspace works (status.tex, status.pdf, transcript folders) + the next easiest way for this user to proceed with the agent as helper.
+
 ```
 
 ### 2) When the agent returns READY
