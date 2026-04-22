@@ -1,51 +1,29 @@
 # CLAUDE.md — Async Collaboration Workspace
 
-This workspace implements the process from `async_workflow.pdf`.
+This repo is a collaborative workspace template from `async_workflow.pdf`.
 
-## Core rule
+## Minimal rules
 
-A contributor can either use manual commands or paste the README’s Setup Prompt into an agent.
-Always begin by reading this file and `status.tex`, then follow the requested workflow.
+1. Work in your own folder only:
+   - `amy/transcripts & notes/`
+   - `jason/transcripts & notes/`
+   - `elizabeth/transcripts & notes/`
+   - `hayley/transcripts & notes/`
 
-## Working rules
+2. Update `status.tex` with color attribution:
+   - `\textcolor{elizC}{...}`
+   - `\textcolor{amyC}{...}`
+   - `\textcolor{jasonC}{...}`
+   - `\textcolor{hayleyC}{...}`
 
-1. **Pull first**
-   - `git pull origin main`
+3. Start your work on a branch: `git checkout -b <name>/async-updates`
 
-2. **Branch per write session**
-   - `git checkout -b <name>/async-updates`
+4. For same-line conflicts in `status.tex`, run:
+   - `python merge-resolve.py status.tex -o status.draft.tex`
+   - resolve manually in `status.tex`.
 
-3. **Contributor scope**
-   - Add raw transcripts/notes in your assigned folder:
-     - `elizabeth/transcripts & notes`
-     - `jason/transcripts & notes`
-     - `amy/transcripts & notes`
-     - `hayley/transcripts & notes`
+5. Canonical outputs:
+   - `status.tex` (source of truth)
+   - `status.pdf` (shared/human-readable output)
 
-4. **Attributed proposals only**
-   - Use these color macros in `status.tex`:
-     - `\textcolor{elizC}{...}`
-     - `\textcolor{amyC}{...}`
-     - `\textcolor{jasonC}{...}`
-     - `\textcolor{hayleyC}{...}`
-
-5. **Drafting pattern**
-   - Keep edits scoped to `status.tex` and your own transcript folder.
-   - Add `[DRAFT]` for machine-proposed text.
-   - Resolve by discussion only when explicit conflict remains.
-
-6. **Conflicts**
-   - For same-line conflicts, run:
-     - `python merge-resolve.py status.tex -o status.draft.tex`
-   - Keep both versions color-coded and resolve manually in a follow-up edit.
-
-7. **Output flow**
-   - `status.tex` is canonical.
-   - `status.pdf` is shareable output.
-
-## Assistant contract
-
-- Do not edit outside this workspace unless explicitly asked.
-- Preserve attribution and traceability.
-- Run only the commands listed by the user or README setup prompt.
-- Return clear pass/fail with exact next steps.
+Only edit files required by the task, keep attribution clear, and keep changes minimal.
