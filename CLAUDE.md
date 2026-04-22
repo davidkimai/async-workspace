@@ -1,53 +1,51 @@
 # CLAUDE.md — Async Collaboration Workspace
 
-This workspace implements the workflow described in `async_workflow.pdf`.
+This workspace implements the process from `async_workflow.pdf`.
+
+## Core rule
+
+A contributor can either use manual commands or paste the README’s Setup Prompt into an agent.
+Always begin by reading this file and `status.tex`, then follow the requested workflow.
 
 ## Working rules
 
-1. Pull latest before editing:
+1. **Pull first**
    - `git pull origin main`
-   - Resolve conflicts in the shared branch first.
 
-2. Branch for each local write session:
-   - `git checkout -b <name>-<topic-or-date>`
-   - Keep only your intended files in your branch.
+2. **Branch per write session**
+   - `git checkout -b <name>/async-updates`
 
-3. Write in your own area:
-   - Add transcripts, references, and notes only under your folder:
+3. **Contributor scope**
+   - Add raw transcripts/notes in your assigned folder:
      - `elizabeth/transcripts & notes`
      - `jason/transcripts & notes`
      - `amy/transcripts & notes`
      - `hayley/transcripts & notes`
 
-4. Use color markers when proposing edits:
-   - Use `\textcolor{elizC}{...}` for Elizabeth
-   - Use `\textcolor{amyC}{...}` for Amy
-   - Use `\textcolor{jasonC}{...}` for Jason
-   - Use `\textcolor{hayleyC}{...}` for Hayley
+4. **Attributed proposals only**
+   - Use these color macros in `status.tex`:
+     - `\textcolor{elizC}{...}`
+     - `\textcolor{amyC}{...}`
+     - `\textcolor{jasonC}{...}`
+     - `\textcolor{hayleyC}{...}`
 
-5. Draft cycle in this workspace:
-   - Update `status.tex` with attributed color-coded input.
-   - Propose `[DRAFT]` and ask for a meeting only on unresolved conflicts.
-   - Commit and push via branch once reviewed.
+5. **Drafting pattern**
+   - Keep edits scoped to `status.tex` and your own transcript folder.
+   - Add `[DRAFT]` for machine-proposed text.
+   - Resolve by discussion only when explicit conflict remains.
 
-6. Conflicts:
-   - For same-line conflicts from two contributors, use `merge-resolve.py` to retain both versions in color.
-   - Escalate to a synchronous meeting when still ambiguous.
+6. **Conflicts**
+   - For same-line conflicts, run:
+     - `python merge-resolve.py status.tex -o status.draft.tex`
+   - Keep both versions color-coded and resolve manually in a follow-up edit.
 
-## Safety / anti-conflict rule
+7. **Output flow**
+   - `status.tex` is canonical.
+   - `status.pdf` is shareable output.
 
-- This workspace is for async contributions only.
-- Avoid silent overwrites in `status.tex`; always keep source attribution and traceability.
+## Assistant contract
 
-## Output flow
-
-- `status.tex` (canonical living doc)
-- `status.pdf` (human-readable compiled output, shared externally)
-
-Use `render-status.sh` to generate/update the PDF after each merge.
-
-## Tooling contract for assistants
-
-- Always read this file before editing.
-- Never edit folders outside `status.tex` and your assigned contributor folder unless explicitly approved.
-- Treat all outputs as attributed draft text until reviewed and merged.
+- Do not edit outside this workspace unless explicitly asked.
+- Preserve attribution and traceability.
+- Run only the commands listed by the user or README setup prompt.
+- Return clear pass/fail with exact next steps.
