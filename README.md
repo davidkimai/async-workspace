@@ -1,65 +1,81 @@
 # Async Collaboration Workspace
 
-A tiny, collaborative template for async team updates shared through a single attributed `status.tex` document.
+This repository is designed to be used **through an AI assistant** rather than manual terminal work.
+The agent handles setup and routine work; people mainly provide direction and review output.
 
-## What is this repo?
-- Canonical source: `status.tex`
-- Shared readable output: `status.pdf` (compiled from LaTeX)
-- Conflict helper: `merge-resolve.py`
-- Optional launch helpers: `start-claude.sh`, `start-codex.sh`
+## Why this is agent-first
 
-## 1) Install / setup (minimal)
+- Lowers technical friction for non-technical contributors.
+- Keeps setup and validation consistent across everyone.
+- Preserves traceability (`status.tex` is the source of truth, `status.pdf` is the shareable output).
 
-### If you are comfortable with Git
+## First run (recommended)
+
+### 1) Paste this prompt into your agent (Claude, Codex, or equivalent)
+
+```text
+You are an onboarding assistant for this project.
+Goal: prepare the workspace for use locally.
+
+Run only these steps:
+1) If folder `async-workspace` does not exist, run:
+   git clone https://github.com/davidkimai/async-workspace.git
+2) Change into folder:
+   cd async-workspace
+3) Pull latest:
+   git pull origin main
+4) Make helper scripts executable:
+   chmod +x merge-resolve.py render-status.sh start-claude.sh start-codex.sh
+5) Confirm these required paths exist:
+   - CLAUDE.md
+   - status.tex
+   - merge-resolve.py
+   - render-status.sh
+   - amy/transcripts & notes/
+   - jason/transcripts & notes/
+   - elizabeth/transcripts & notes/
+   - hayley/transcripts & notes/
+
+If the folder already exists, skip cloning and start at step 2.
+Do not modify any repo files.
+Reply with: READY + git remote + current branch + next step for user.
+```
+
+### 2) When the agent returns READY
+
+Run with the repository open in VS Code and proceed with editing flow.
+
+## Standard contributor flow (agent-assisted)
+
+1. **Agent prompt:** Ask agent to draft the next `[DRAFT]` section in `status.tex` from your notes.
+2. **Review + adjust:** Contributor reviews and approves.
+3. **Commit/push:** Agent can run `git add status.tex` and push on your branch.
+
+## Quick fallback (manual setup)
 
 ```bash
 git clone https://github.com/davidkimai/async-workspace.git
 cd async-workspace
 ```
 
-If the folder already exists, open that existing folder.
+If the folder already exists, open it directly.
 
-### If you are not technical (copy/paste to AI agent)
+### Contributor note locations
 
-Send this to Claude / Codex / your preferred agent:
+- `amy/transcripts & notes/`
+- `jason/transcripts & notes/`
+- `elizabeth/transcripts & notes/`
+- `hayley/transcripts & notes/`
 
-```text
-Clone the repo to local if it is not already here: https://github.com/davidkimai/async-workspace.git
-If cloning fails, stop and tell me the exact error.
-No other changes.
-```
+### Color macros for proposals in `status.tex`
 
-The agent can run this as a first step so you do not need command-line setup.
+- `\textcolor{elizC}{...}`
+- `\textcolor{amyC}{...}`
+- `\textcolor{jasonC}{...}`
+- `\textcolor{hayleyC}{...}`
 
-## Why this prompt is included
-
-`Setup prompts` are increasingly used as a deployment/startup primitive for AI workflows. A quick web check surfaced prompt-first onboarding patterns in AI tool ecosystems (for example, [AI app bootstrap setup prompts](https://github.com/gregmeyer/ai-app-bootstrap/blob/main/get-started/prompts/00-setup-editor.md) and [OpenClaw setup guidance](https://docs.openclaw.ai/start/openclaw)).
-This repo keeps setup as a one-shot prompt so non-technical contributors can start fast.
-
-## If you need the repository without terminal
-
-1. Open GitHub in your browser.
-2. Click **Code ▸ Download ZIP**.
-3. Unzip the file.
-4. Open the folder in VS Code (if available).
-
-## Quick notes for first-time contributors
-
-- Put notes in your folder:
-  - `amy/transcripts & notes/`
-  - `jason/transcripts & notes/`
-  - `elizabeth/transcripts & notes/`
-  - `hayley/transcripts & notes/`
-- Use color macros in `status.tex`:
-  - `\\textcolor{elizC}{...}`
-  - `\\textcolor{amyC}{...}`
-  - `\\textcolor{jasonC}{...}`
-  - `\\textcolor{hayleyC}{...}`
-
-## Optional helper commands
+### Optional conflict command
 
 ```bash
-git checkout -b <your-name>/async-updates
-./render-status.sh              # optional, if LaTeX is installed
 python merge-resolve.py status.tex -o status.draft.tex
 ```
